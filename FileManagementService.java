@@ -1,17 +1,16 @@
 package files.actions;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 public class FileManagementService {
 
-    NewFile file = new NewFile();
+    FileFunctions fileFunctions = new FileFunctions();
 
     public void createNewFile(String format, String fileName){
         if(Validator.validSelectedFormat(format)){
             try{
-                file.createEmptyFile(FileFormat.valueOf(format.toUpperCase()), fileName);
+                fileFunctions.createEmptyFile(FileFormat.valueOf(format.toUpperCase()), fileName);
             } catch (IOException e) {
                 System.err.println("Błąd podczas tworzenia nowego pliku");
                 e.printStackTrace();
@@ -23,33 +22,31 @@ public class FileManagementService {
     }
 
     public void deleteFile(String name){
-        file.deleteFile(name);
+        fileFunctions.deleteFile(name);
     }
 
     public void showFiles(){
-        file.showFiles();
+        fileFunctions.showFiles();
     }
 
     public void readFileContent(String name){
         try{
-            List<String> content = file.readFile(name);
+            List<String> content = fileFunctions.readFile(name);
             for(String str : content){
                 System.out.println(str);
             }
-           // System.out.println(Arrays.toString(content.toArray()));
-        } catch(EmptyNameOfFileException e){
+        } catch(IncorectNameException e){
             e.printStackTrace();
         } catch(IOException e) {
             System.err.println("Błąd podczas odczytu zawartości pliku " + name);
             e.printStackTrace();
         }
-
     }
 
     public void writeToFile(String name, List<String> lines){
         try{
-            file.writeToFile(name, lines);
-        } catch(EmptyNameOfFileException e){
+            fileFunctions.writeToFile(name, lines);
+        } catch(IncorectNameException e){
             e.printStackTrace();
         } catch(IOException e){
             System.err.println("Błąd podczas zapisu danych do pliku " + name);
@@ -57,36 +54,38 @@ public class FileManagementService {
         }
     }
 
-    public void display10Lines(int next10, String name){
+    public boolean display10Lines(int next10, String name){
         try{
-            file.display10Lines(next10,name);
-        } catch(EmptyNameOfFileException e){
+            fileFunctions.display10Lines(next10,name);
+            return true;
+        } catch(IncorectNameException e){
             e.printStackTrace();
+            return false;
         } catch(IOException e){
             System.err.println("Błąd podczas wyświetlania fragmentu tekstu");
             e.printStackTrace();
+            return false;
         }
     }
 
     public void createDirectory(String name){
-        file.createDir(name);
+        fileFunctions.createDir(name);
     }
 
     public void deleteDirectory(String name){
-        file.deleteDir(name);
+        fileFunctions.deleteDir(name);
     }
 
     public void setPath(String path){
         try{
-            file.setPath(path);
-        } catch (EmptyNameOfFileException e){
+            fileFunctions.setPath(path);
+        } catch (IncorectNameException e){
             e.printStackTrace();
         }
-
     }
 
     public void getPath(){
-        System.out.println(file.getPath());
+        System.out.println(fileFunctions.getPath());
     }
 
     public static void clearConsole(){

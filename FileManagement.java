@@ -6,8 +6,8 @@ import java.util.Scanner;
 
 /**
  * Functions
- * Create empty - ok, delete - ok , write - append ok, read - ok,
- * create directory - ok, delete directory - ok, display by 10 lines - ok
+ * Create empty file or dir, delete, add text to file, read,
+ * display by 10 lines
  *
  */
 
@@ -22,7 +22,7 @@ public class FileManagement {
         printMenu();
 
         while(!response.equals("exit")){
-            if(!response.equals(FIRSTSCAN)) System.out.println("0 - wyświetl menu");
+            if(!response.equals(FIRSTSCAN) && !response.equals("0")) System.out.println("0 - wyświetl menu");
             System.out.print("Wybierz akcje: ");
             Scanner scanner = new Scanner(System.in);
             response = scanner.nextLine();
@@ -94,24 +94,25 @@ public class FileManagement {
                     break;
 
                 case "10":
+                    String resp = "";
+                    int next10 = 0;
+                    boolean correctRead = true;
                     FileManagementService.clearConsole();
                     System.out.println("Podaj nazwę pliku");
                     name = scanner.nextLine();
-                    String resp = "";
-                    int next10 = 0;
-                    fileMService.display10Lines(next10,name);
-                    while(!resp.equals("q")){
-                        System.out.println("\nWpisz litere oraz zatwierdz.Przewijaj tekst za pomocą 'w' oraz 's'. Aby zakończyć wpisz 'q'");
+                    correctRead = fileMService.display10Lines(next10,name);
+                    while(!resp.equals("q") && correctRead){
+                        System.out.println("\nWpisz literę oraz zatwierdz. Przewijaj tekst za pomocą litery 'f' oraz 'b'. Aby zakończyć wpisz 'q'");
                         resp = scanner.nextLine();
-                        if(resp.equals("w")) {
+                        if(resp.equals("f")) {
                             next10++;
                             FileManagementService.clearConsole();
-                            fileMService.display10Lines(next10,name);
+                            correctRead = fileMService.display10Lines(next10,name);
                         }
-                        if(next10>0 && resp.equals("s")){
+                        if(next10>0 && resp.equals("b")){
                             next10--;
                             FileManagementService.clearConsole();
-                            fileMService.display10Lines(next10,name);
+                            correctRead = fileMService.display10Lines(next10,name);
                         }
                         System.out.println();
                     }
@@ -123,7 +124,6 @@ public class FileManagement {
                 default:
                     System.out.println("Podano niepoprawną wartość");
                     break;
-
             }
             System.out.println();
         }
