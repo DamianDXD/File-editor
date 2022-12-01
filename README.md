@@ -1,2 +1,2 @@
 # File-editor
-Simply console app for file edition(create, delete, display, etc)
+Simply console app for edit file(create, delete, display, etc)
